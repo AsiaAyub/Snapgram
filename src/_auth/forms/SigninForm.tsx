@@ -41,11 +41,15 @@ const SigninForm = () => {
       password: values.password,
     });
 
+    console.log("session", session);
+
     if (!session) {
       return toast({ title: "Sign in failed. Please try again." });
     }
 
     const isLoggedIn = await checkAuthUser();
+
+    console.log("isLoggedIn", isLoggedIn);
 
     if (isLoggedIn) {
       form.reset();
