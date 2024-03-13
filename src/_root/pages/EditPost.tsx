@@ -13,42 +13,6 @@ const EditPost = () => {
 
   const { data: post, isPending } = useGetPostById(id || "");
 
-  // const prse = databases.getDocument(
-  //   "65e82a02a83687b18577",
-  //   "65e82a8a0cf6175f2d90",
-  //   "65eebf294c4e2c822631"
-  // );
-
-  // prse.then(
-  //   function (response) {
-  //     // Iterate over object properties and log key-value pairs
-  //     //for (const key in response) {
-  //     if (response.hasOwnProperty("caption")) {
-  //       const value = response["caption"];
-  //       console.log(`${"caption"}: ${value}`);
-  //     }
-
-  //     if (response.hasOwnProperty("imageUrl")) {
-  //       const value = response["imageUrl"];
-  //       console.log(`${"imageUrl"}: ${value}`);
-
-  //       if (response.hasOwnProperty("location")) {
-  //         const value = response["location"];
-  //       }
-
-  //       if (response.hasOwnProperty("tags")) {
-  //         const value = response["tags"];
-  //       }
-  //     }
-
-  // }
-  //     console.log(typeof response); // Success
-  //   },
-  //   function (error) {
-  //     console.log(error); // Failure
-  //   }
-  // );
-
   return (
     <div className="flex flex-1">
       <div className="common-container">
