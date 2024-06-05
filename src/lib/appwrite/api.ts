@@ -62,7 +62,7 @@ export async function signInAccount(user: { email: string; password: string }) {
 export async function getCurrentUser() {
   try {
     const currentAccount = await account.get();
-    console.log("loggedaccount", currentAccount);
+    
     if (!currentAccount) throw Error;
 
     const currentUser = await databases.listDocuments(
@@ -73,7 +73,7 @@ export async function getCurrentUser() {
 
     if (!currentUser) throw Error;
 
-    console.log("currentuser", currentUser);
+   
 
     return currentUser.documents[0];
   } catch (error) {
@@ -236,12 +236,36 @@ export async function savePost(userId: string, postId: string) {
   }
 }
 
+// ============================== SAVE POST
+export async function createSaves(userId: string, postId: string) {
+  console.log(postId, userId)
+  try {
+    const updatedPost = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      ID.unique(),
+      {
+        
+        user: userId, 
+        post: postId,
+        
+      }
+    );
+
+    if (!updatedPost) throw Error;
+
+    return updatedPost;
+  } catch (error) {
+    console.log(error,'here is the error');
+  }
+}
+
 // ============================== DELETE SAVED POST
 export async function deleteSavedPost(savedRecordId: string) {
   try {
     const statusCode = await databases.deleteDocument(
       appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
+      appwriteConfig.savesCollectionId,
       savedRecordId
     );
 
@@ -387,6 +411,28 @@ export async function searchPosts(searchTerm: string) {
       [Query.search("caption", searchTerm)]
     );
 
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getInfiniteSavedPosts({ pageParam }: { pageParam: number }) {
+  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      queries
+    );
+    console.log(posts,'here is the posts')
     if (!posts) throw Error;
 
     return posts;
